@@ -10,6 +10,7 @@
 ## 名冊與架構決定（2026-11-08，與使用者確認）
 - **範圍完全收斂在 AGY 內**：不依賴 Codex CLI 或 Claude Code CLI，只使用 AGY 內建工具與 `agy` CLI。
 - **Worker 委派給 Gemini 3.8 Flash（透過 AGY 內建 `invoke_subagent(Model="flash")`）**：
+  - 依據 [Gemini 4 Argon Developer Guide](https://aistudio.google.com/learn/gemini-4-argon-developer-guide)（*4. Use Argon as an orchestrator*），官方建議以 Gemini 4 Argon 作為主導協調者（負責問題拆解、介面設計、重度架構推理與最終審查），搭配 `Gemini 3.8 Flash`（`model: flash`）子代理作為高速平行執行主力，承接平行且範圍明確的任務：快速程式碼探索（fast codebase explorations）、獨立葉節點模組遷移（migrating individual leaf modules）、樣板測試撰寫（writing boilerplate tests）、高頻檢查（running high-frequency checks），以及耗費 context 的大檔案／多模態原始資訊抽取。
   - 查驗子代理 session DB（`conversations/<id>.db`）可見，`invoke_subagent(Model="flash")` 對應 AGY 內部的 `gemini-3.8-flash-tiered`（`MODEL_PLACEHOLDER_M322`）。在不強制鎖定 `medium` reasoning effort 的前提下，改用內建 `invoke_subagent` 省去了 CLI 呼叫、`.out.md` 重導向、雙環境編碼與手動管理 `git worktree` 的所有文字說明，使 `SKILL.md` 大幅精簡。
   - 唯讀且不需網路的任務直接用內建 `TypeName: "research"`（唯讀沙盒、無網路）；需要寫檔或執行外部命令時，以 `define_subagent` 定義 `EnableWriteTools: true, EnableSubagentTools: false` 的 worker，平行寫入用 `Workspace: "share"`（底層共用 git 物件的獨立工作樹）。
   - 禁用 `TypeName: "self"`：因其繼承父代理的 `EnableSubagentTools: true` 與全套規則，有遞迴委派風險。

@@ -64,7 +64,7 @@ Before executing a plan for a design, architecture change, merge-bound code, or 
 
 | 角色 | 模型 / 呼叫方式 | 用途 |
 | --- | --- | --- |
-| Worker | `flash`（AGY 內建 `invoke_subagent`） | 所有委派：圖片、PDF、影音抽取；機械性程式修改；範圍明確的調查 |
+| Worker | `flash`（AGY 內建 `invoke_subagent`） | 主代理拆解問題並設計好介面後，平行委派範圍明確的任務：快速程式碼探索、獨立 leaf module 遷移、機械性編輯、樣板測試、高頻檢查，以及圖片／PDF／影音原始資訊抽取 |
 | Advisor | `claude-opus-5-5-medium`（`agy` CLI） | 執行設計、架構變更、要 merge 的程式碼或根因修正計畫前的第二意見 |
 
 - **Worker 隔離與清理**：唯讀離線調查用內建 `research`；寫檔任務以 `define_subagent` 定義無子代理權限的 writer，平行寫檔用 `Workspace: "share"`（完成驗收與合併後，以 `manage_subagents` 清理）。

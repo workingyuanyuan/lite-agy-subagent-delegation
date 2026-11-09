@@ -1,6 +1,6 @@
 ---
 name: delegate
-description: Before executing a plan for a design, architecture change, merge-bound code, or root-cause fix, get a second opinion from Claude Opus 5.5 Medium; delegate multimodal, mechanical, or bounded investigation work to Gemini 3.8 Flash.
+description: Before executing a plan for a design, architecture change, merge-bound code, or root-cause fix, get a second opinion from Claude Opus 5.5 Medium; delegate parallel, well-scoped exploration, implementation, check, or extraction tasks to Gemini 3.8 Flash.
 ---
 
 # Delegate and consult
@@ -10,7 +10,7 @@ User instructions override this skill. Treat every worker or advisor result as a
 ## When
 
 - **Advisor (`claude-opus-5-5-medium` via `agy` CLI)**: before executing a plan for a design, architecture change, merge-bound code, or root-cause fix, consult Opus for a second opinion. Skip small, low-risk changes.
-- **Worker (`flash` via `invoke_subagent`)**: delegate when it saves your context or improves quality and checking costs less than doing the work: image/PDF/audio/video extraction, mechanical edits (renames, format conversion, boilerplate, tests that follow examples), and bounded investigation. Do not delegate evidence-backed research reports.
+- **Worker (`flash` via `invoke_subagent`)**: after you break down the problem and design interfaces, delegate parallel, well-scoped tasks when it saves context or time and checking costs less than doing the work: fast codebase exploration, leaf-module migrations, mechanical edits, boilerplate tests, high-frequency checks, and raw image/PDF/audio/video extraction. Do not delegate evidence-backed research reports.
 
 ## Run
 
@@ -23,7 +23,7 @@ User instructions override this skill. Treat every worker or advisor result as a
 
 ## Brief
 
-- Worker (`Prompt`): objective, necessary context, write scope, deliverable, acceptance check.
+- Worker (`Prompt`): objective, designed interfaces/context, write scope, deliverable, acceptance check.
 - Advisor (`.brief.md`): problem, constraints, relevant file paths, and your draft plan; ask for flaws, missed cases, and better alternatives, ordered by severity with reasons; state that it is read-only and must not modify files.
 - Every brief: state at the top any tool failure, incomplete work, or change of method; say "unknown" rather than invent sources, numbers, or dates; do not delegate or consult other models.
 
