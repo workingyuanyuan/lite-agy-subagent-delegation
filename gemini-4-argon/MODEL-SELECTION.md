@@ -22,7 +22,7 @@
     - `workspace: "share"` 的 worktree 從 `HEAD` 切出，若主代理有尚未 commit 的介面設計，需先 commit 或寫入 brief。
     - `swarm` 靠 `@coordinator` 觸發主代理喚醒，因此 brief 結尾固定要求：`Do not add workers or consult other models; post your final result to @coordinator in one message.`，主代理被喚醒後以 `read_board` 讀取結果，並在驗收／合併後以 `swarm(action: "kill")` 清除 worker。
     - 實測 `swarm(action: "models")` 顯示 `gemini-4-hydrogen-*` 與 `gemini-3.8-flash-*` 共用同一配額池（剩餘比例與重置時間相同），因此 Hydrogen 額度耗盡時不退回 Flash，直接由主代理自行處理。
-- **Advisor 為 AGY 內的 Claude Opus 5.5 Medium（`agy --model claude-opus-5-5-medium`）**：
+- **Advisor 為 AGY 內的 Claude Opus 5.5 Low（`agy --model claude-opus-5-5-low`）**：
   - Advisor 屬低頻、單次、唯讀的第二意見審查，維持透過 `agy` CLI 呼叫可在單輪直接由 `run_command` 收回完整輸出，不在對話中留下 Swarm 留言板狀態。
   - **Linux / WSL `PATH` fallback**：AGY 2.0 桌面端在 Linux / WSL 的 `run_command` 啟動非 login `/bin/bash`，`PATH` 可能不含 `~/.local/bin`；若直接執行 `agy` 找不到指令，先重試 `~/.local/bin/agy`，避免誤判為「Opus 意見不可用」。
   - **Advisor 觸發點是固定檢查點**：執行設計、架構變更、要 merge 的程式碼或根因修正的計畫之前詢問 Opus；小而低風險的改動跳過。

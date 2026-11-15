@@ -1,6 +1,6 @@
 ---
 name: delegate
-description: Before executing a plan for a design, architecture change, merge-bound code, or root-cause fix, get a second opinion from Claude Opus 5.5 Medium; delegate parallel, well-scoped exploration, implementation, check, or extraction tasks to Gemini 4 Hydrogen.
+description: Before executing a plan for a design, architecture change, merge-bound code, or root-cause fix, get a second opinion from Claude Opus 5.5 Low; delegate parallel, well-scoped exploration, implementation, check, or extraction tasks to Gemini 4 Hydrogen.
 ---
 
 # Delegate and consult
@@ -9,7 +9,7 @@ User instructions override this skill. Treat every worker or advisor result as a
 
 ## When
 
-- **Advisor (`claude-opus-5-5-medium` via `agy` CLI)**: before executing a plan for a design, architecture change, merge-bound code, or root-cause fix, consult Opus for a second opinion. Skip small, low-risk changes.
+- **Advisor (`claude-opus-5-5-low` via `agy` CLI)**: before executing a plan for a design, architecture change, merge-bound code, or root-cause fix, consult Opus for a second opinion. Skip small, low-risk changes.
 - **Worker (`gemini-4-hydrogen-medium` via `swarm`)**: after you break down the problem and design interfaces, delegate parallel, well-scoped tasks when it saves context or time and checking costs less than doing the work: fast codebase exploration, leaf-module migrations, mechanical edits, boilerplate tests, high-frequency checks, and raw image/PDF/audio/video extraction. Do not delegate evidence-backed research reports.
 
 ## Run
@@ -19,7 +19,7 @@ User instructions override this skill. Treat every worker or advisor result as a
   - Write-capable: `workspace: "share"` for parallel writers in a git repository (commit or include in the brief any uncommitted interfaces first, as worktrees branch from `HEAD`), or `"inherit"` for a single writer while you do not edit its files.
   - After adding workers, end your turn to wait for the `@coordinator` wakeup, then call `read_board`. Clarify via `post_message`. If `medium` fails acceptance or the task is clearly hard, add a new worker on `gemini-4-hydrogen-high` (optionally with `fork: "<old-worker>"`) and kill the old one; do not use `swarm(action: "model")` to raise effort.
 - **Advisor (`agy` CLI from project root)**: write the brief with `write_file` to `<home>/.local/state/delegation-log/<project-dir-name>/<YYYYMMDD-HHMMSS>-opus.brief.md` and pass it by path:
-  `agy --model claude-opus-5-5-medium --dangerously-skip-permissions --disable-slash-commands --print-timeout 20m -p "Read the brief at <brief path> and follow it."`
+  `agy --model claude-opus-5-5-low --dangerously-skip-permissions --disable-slash-commands --print-timeout 20m -p "Read the brief at <brief path> and follow it."`
   If `agy` is not found in `PATH`, retry with `~/.local/bin/agy` on Linux/WSL. Read the review from the command output (or task log). If the output is not a valid review (e.g., `RESOURCE_EXHAUSTED` / `quota reached` or empty), tell the user the Opus opinion is unavailable and continue.
 
 ## Brief

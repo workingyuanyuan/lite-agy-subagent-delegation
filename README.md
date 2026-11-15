@@ -3,7 +3,7 @@
 讓 Antigravity（AGY）主代理透過全域 `GEMINI.md` 的一句提示讀取個人全域 skill，在 AGY 內部提供兩項功能：
 
 1. **委派（Worker）**：透過 AGY 內建 `swarm`（`gemini-4-hydrogen-medium`，必要時升 `-high`）把任務交給 Gemini 4 Hydrogen。只在能省下主代理 context 或時間、且驗證成本低於自己做時才委派。
-2. **第二意見（Advisor）**：執行設計、架構變更、要 merge 的程式碼或根因修正的計畫前，透過 `agy` CLI 詢問 `claude-opus-5-5-medium`。
+2. **第二意見（Advisor）**：執行設計、架構變更、要 merge 的程式碼或根因修正的計畫前，透過 `agy` CLI 詢問 `claude-opus-5-5-low`。
 
 `gemini-4-argon` 是為 Gemini 4 Argon 主代理設計的版本。Claude Code 版見 [lite-claude-subagent-delegation](https://github.com/workingyuanyuan/lite-claude-subagent-delegation)，Codex 版見 [lite-codex-subagent-delegation](https://github.com/workingyuanyuan/lite-codex-subagent-delegation)。
 
@@ -65,7 +65,7 @@ Before executing a plan for a design, architecture change, merge-bound code, or 
 | 角色 | 模型 / 呼叫方式 | 用途 |
 | --- | --- | --- |
 | Worker | `gemini-4-hydrogen-medium` / `-high`（AGY 內建 `swarm`） | 主代理拆解問題並設計好介面後，平行委派範圍明確的任務：快速程式碼探索、獨立 leaf module 遷移、機械性編輯、樣板測試、高頻檢查，以及圖片／PDF／影音原始資訊抽取 |
-| Advisor | `claude-opus-5-5-medium`（`agy` CLI） | 執行設計、架構變更、要 merge 的程式碼或根因修正計畫前的第二意見 |
+| Advisor | `claude-opus-5-5-low`（`agy` CLI） | 執行設計、架構變更、要 merge 的程式碼或根因修正計畫前的第二意見 |
 
 - **Worker 隔離與清理**：唯讀任務使用 `workspace: "inherit"` 並在 brief 中禁止改檔；平行寫檔任務使用 `workspace: "share"`（自動建立獨立 git worktree，完成驗收與合併後以 `swarm(action: "kill")` 清理）。Worker 完成時透過 `@coordinator` 喚醒主代理並以 `read_board` 收取結果。
 - **Advisor 唯讀保護**：`agy` 沒有可靠的唯讀模式，因此在 brief（存於 `~/.local/state/delegation-log/<專案>/`）中寫明唯讀，並在 git 專案中於執行前後比對 `git status --porcelain` 與 `git diff`。若遇額度耗盡（`RESOURCE_EXHAUSTED`）則回報 Opus 意見不可用並繼續。
